@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-service-deployment
+  namespace: dev
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: hello
+  template:
+    metadata:
+      labels:
+        app: hello
+    spec:
+      volumes:
+        - name: datavol
+          emptyDir: {}
+      containers:
+        - name: hello-service
+          image: loadtest_hello:latest
+          volumeMounts:
+            - mountPath: /hello-data
+              name: datavol
+          ports:
+            - containerPort: 8082
+          imagePullPolicy: Never
+          resources:
+            limits:
+              cpu: 500m
+            requests: ## Mandatory for horizontal pod autoscaler
+              cpu: 200m
