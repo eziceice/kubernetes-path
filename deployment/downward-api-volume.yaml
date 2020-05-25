@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: downward-api-deployment-volume
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: downward-volume
+  template:
+    metadata:
+      labels:
+        app: downward-volume
+        cluster: dev-cluster
+        name: yutianli
+      annotations:
+        build: "2"
+        builder: yutianli
+    spec:
+      containers:
+        - name: env-container
+          image: bash:latest
+          command: ["/bin/sh", "-c", "env"]
+          volumeMounts:
+            - name: podinfo
+              mountPath: /test
+              readOnly: false
+      volumes:
+        - name: podinfo
+          downwardAPI:
+            items:
+              - path: "labels"
+                fieldRef:
+                  fieldPath: metadata.labels
+              - path: "annotations"
+                fieldRef:
+                  fieldPath: metadata.annotations
