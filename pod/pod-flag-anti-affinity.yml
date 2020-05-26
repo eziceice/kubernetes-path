@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-flag-anti-affinity
+spec:
+  containers:
+    - name: nginx
+      image: nginx:latest
+  affinity:
+    podAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+              - key: "security"
+                operator: In
+                values: ["s1"]
+          topologyKey: minikube.k8s.io/version
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+              - key: "app"
+                operator: In
+                values: ["nginx"]
+          topologyKey: zone

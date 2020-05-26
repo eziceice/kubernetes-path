@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-flag-affinity
+  labels:
+    security: "s1"
+    app: pod-flag-affinity
+spec:
+  containers:
+    - name: nginx
+      image: nginx:latest
+  affinity:
+    podAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+              - key: "security"
+                operator: In
+                values: ["s1"]
+          topologyKey: zone
+    tolerations:
+      - key: "key"
+        operator: "Equal"
+        value: "value"
+        effect: "NoSchedule"
+        tolerationSeconds: 3600
