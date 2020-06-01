@@ -35,3 +35,4 @@ spec:
           - containerPort: 80
       nodeSelector:
         zone: ssd
+      priorityClassName: high-priority
