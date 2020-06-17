@@ -6,6 +6,10 @@ metadata:
     security: "s1"
     app: pod-flag
 spec:
+  # hostNetwork: true/false
   containers:
     - name: nginx
       image: nginx:latest
+      ports:
+        - hostPort: 8081
+          containerPort: 80
